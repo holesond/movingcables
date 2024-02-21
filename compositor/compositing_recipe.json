@@ -1,0 +1,86 @@
+{
+    "test": {
+        "source_clips": {
+            "poking": 26,
+            "push-pull": 16,
+            "lateral": 10,
+            "static": 21
+        },
+        "motion_clip_augmentation_factor": 2,
+        "background_classes": {
+            "clutter": 52,
+            "distractor": 26,
+            "plain_original": 5,
+            "plain_transformed": 21
+        },
+        "static_cable_classes": {
+            "static_clips": 42,
+            "single_images": 62
+        },
+        "cable_colors": {
+            "original_cable": 8,
+            "original_cable_and_background": 2,
+            "transformed": 94
+        },
+        "cable_densities": {
+            "low": {"n_clips": 52, "n_cables": [4, 5]},
+            "high": {"n_clips": 52, "n_cables": [10, 11]}
+        }
+    },
+    "train": {
+        "source_clips": {
+            "poking": 67,
+            "push-pull": 12,
+            "lateral": 3,
+            "static": 0
+        },
+        "motion_clip_augmentation_factor": 2,
+        "background_classes": {
+            "clutter": 82,
+            "distractor": 41,
+            "plain_original": 8,
+            "plain_transformed": 33
+        },
+        "static_cable_classes": {
+            "static_clips": 0,
+            "single_images": 164
+        },
+        "cable_colors": {
+            "original_cable": 12,
+            "original_cable_and_background": 4,
+            "transformed": 148
+        },
+        "cable_densities": {
+            "low": {"n_clips": 82, "n_cables": [4, 5]},
+            "high": {"n_clips": 82, "n_cables": [10, 11]}
+        }
+    },
+    "validation": {
+        "source_clips": {
+            "poking": 11,
+            "push-pull": 8,
+            "lateral": 3,
+            "static": 0
+        },
+        "motion_clip_augmentation_factor": 2,
+        "background_classes": {
+            "clutter": 22,
+            "distractor": 11,
+            "plain_original": 2,
+            "plain_transformed": 9
+        },
+        "static_cable_classes": {
+            "static_clips": 0,
+            "single_images": 44
+        },
+        "cable_colors": {
+            "original_cable": 3,
+            "original_cable_and_background": 1,
+            "transformed": 40
+        },
+        "cable_densities": {
+            "low": {"n_clips": 22, "n_cables": [4, 5]},
+            "high": {"n_clips": 22, "n_cables": [10, 11]}
+        }
+    }
+}

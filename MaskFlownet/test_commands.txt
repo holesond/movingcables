@@ -1,0 +1,14 @@
+## MaskFlownet
+
+time python3 predict_new_data.py test_images/flow_a1-a2.png MaskFlownet.yaml --image_1 test_images/a1.jpg --image_2 test_images/a2.jpg -g '' -c 8caNov12
+
+time python3 predict_new_data.py test_images/flow_a2-a3.png MaskFlownet.yaml --image_1 test_images/a2.jpg --image_2 test_images/a3.jpg -g '' -c 8caNov12
+
+
+
+
+## MaskFlownet_S
+
+time python3 predict_new_data.py test_images/flow_a1-a2-s.png MaskFlownet_S.yaml --image_1 test_images/a1.jpg --image_2 test_images/a2.jpg -g '' -c dbbSep30
+
+time python3 predict_new_data.py test_images/flow_a2-a3-s.png MaskFlownet_S.yaml --image_1 test_images/a2.jpg --image_2 test_images/a3.jpg -g '' -c dbbSep30

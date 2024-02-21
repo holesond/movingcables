@@ -1,0 +1,10 @@
+numpy
+matplotlib
+imageio
+pypng
+pyyaml
+mxnet==1.5.1    # CPU support only.
+flow_vis
+moviepy
+opencv-contrib-python   # For cv2. May be also only opencv-python.
+tqdm

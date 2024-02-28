@@ -451,6 +451,8 @@ Render a video showing motion segmentation masks found by all three methods for 
 time python3 render_mask_video.py videos/test-0006-seg.mp4 $DATASET_ROOT/sampled_compositions_small/test/rgb_clips/0006 results/mfn/sampled_compositions_small/test/masks/0006 results/mfnprob/sampled_compositions_small/test/masks/0006 results/farneback/sampled_compositions_small/test/masks/0006
 ```
 
+https://github.com/holesond/movingcables/assets/6507466/39ab84f5-5482-4177-adc2-03449bcab0c9
+
 ![Segmentation - test clip 0006.](videos/test-0006-seg.mp4)
 
 
@@ -471,6 +473,8 @@ Render a video showing the ground truth optical and normal flow, the ground trut
 ```
 time python3 render_flow_video.py videos/test-0006-flow.mp4 $DATASET_ROOT/sampled_compositions_small/test/rgb_clips/0006 -e results/mfn/sampled_compositions_small/test/normal_flow/0006 -e results/mfnprob/sampled_compositions_small/test/normal_flow/0006 -e results/farneback/sampled_compositions_small/test/normal_flow/0006
 ```
+
+https://github.com/holesond/movingcables/assets/6507466/01d89133-86b7-47db-a5de-95bf430afb27
 
 ![Optical flow - test clip 0006.](videos/test-0006-flow.mp4)
 

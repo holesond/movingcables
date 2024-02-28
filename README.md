@@ -448,10 +448,10 @@ The images with the GT label in the top row show the ground truth segmentation, 
 Render a video showing motion segmentation masks found by all three methods for clip 0006 from the small test set (runtime 27s):
 
 ```
-time python3 render_mask_video.py videos/test-0006-seg.avi $DATASET_ROOT/sampled_compositions_small/test/rgb_clips/0006 results/mfn/sampled_compositions_small/test/masks/0006 results/mfnprob/sampled_compositions_small/test/masks/0006 results/farneback/sampled_compositions_small/test/masks/0006
+time python3 render_mask_video.py videos/test-0006-seg.mp4 $DATASET_ROOT/sampled_compositions_small/test/rgb_clips/0006 results/mfn/sampled_compositions_small/test/masks/0006 results/mfnprob/sampled_compositions_small/test/masks/0006 results/farneback/sampled_compositions_small/test/masks/0006
 ```
 
-![Segmentation - test clip 0006.](videos/test-0006-seg.avi)
+![Segmentation - test clip 0006.](videos/test-0006-seg.mp4)
 
 
 **Show optical flow images**
@@ -469,10 +469,10 @@ python3 show_flow.py $DATASET_ROOT/sampled_compositions_small/test/rgb_clips/000
 Render a video showing the ground truth optical and normal flow, the ground truth instance segmentation and the (normal) optical flow found by all three methods for clip 0006 from the small test set (runtime 26s):
 
 ```
-time python3 render_flow_video.py videos/test-0006-flow.avi $DATASET_ROOT/sampled_compositions_small/test/rgb_clips/0006 -e results/mfn/sampled_compositions_small/test/normal_flow/0006 -e results/mfnprob/sampled_compositions_small/test/normal_flow/0006 -e results/farneback/sampled_compositions_small/test/normal_flow/0006
+time python3 render_flow_video.py videos/test-0006-flow.mp4 $DATASET_ROOT/sampled_compositions_small/test/rgb_clips/0006 -e results/mfn/sampled_compositions_small/test/normal_flow/0006 -e results/mfnprob/sampled_compositions_small/test/normal_flow/0006 -e results/farneback/sampled_compositions_small/test/normal_flow/0006
 ```
 
-![Optical flow - test clip 0006.](videos/test-0006-flow.avi)
+![Optical flow - test clip 0006.](videos/test-0006-flow.mp4)
 
 
 ## Dataset compositing code

@@ -483,7 +483,7 @@ The compositing code can create (custom) compositions from the source dataset cl
 
 We obtained all the reported runtimes on a desktop computer with an NVIDIA GeForce RTX 2080 Ti and Intel Core i9-9900K CPU @ 3.60GHz.
 
-### Installation
+### <a name="installation-2"></a> Installation
 
 The compositing code uses a modified Noise2NoiseFlow software package to generate artificial image sensor noise. The Noise2NoiseFlow package needs to be present in the root folder of the MovingCables source code package. One can download it from https://github.com/holesond/Noise2NoiseFlow:
 

@@ -34,7 +34,13 @@ This repository contains:
 
 ## Qualitative motion segmentation results on real-world scenes
 
+
+https://github.com/holesond/movingcables/assets/6507466/c0e390da-0179-40af-a041-3182e0b82bea
+
 ![Hoses and ropes in a workshop.](videos/workshop-hoses-ropes.mp4)
+
+
+https://github.com/holesond/movingcables/assets/6507466/a1a766d0-396c-4eb1-8761-15dd1f97724e
 
 ![Untidy cables in an office.](videos/office-untidy-cables.mp4)
 

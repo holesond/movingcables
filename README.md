@@ -5,14 +5,15 @@ By Ondřej Holešovský, Radoslav Škoviera, Václav Hlaváč.
 ## Table of contents
 
 1. [Introduction](#introduction)
-2. [Dataset](#dataset)
-3. [License](#license)
-4. [Evaluation code](#evaluation-code)
+2. [Qualitative motion segmentation results on real-world scenes](#qualitative-motion-segmentation-results-on-real-world-scenes)
+3. [Dataset](#dataset)
+4. [License](#license)
+5. [Evaluation code](#evaluation-code)
     * [Installation](#installation)
     * [Compute the evaluation results](#compute-the-evaluation-results)
     * [Show the computed quantitative results](#show-the-computed-quantitative-results)
     * [Show or generate qualitative visualizations](#show-or-generate-qualitative-visualizations)
-5. [Dataset compositing code](#dataset-compositing-code)
+6. [Dataset compositing code](#dataset-compositing-code)
     * [Installation](#installation-2)
     * [Usage](#usage)
 
@@ -30,6 +31,14 @@ This repository contains:
 - The code to evaluate MfnProb, MaskFlownet and Farnebäck cable motion segmentation methods on the MovingCables dataset. (```evaluate_all.py```, ```evaluate_single.py```)
 - The code to print the quantitative evaluation metrics (```show_stats.py```, ```stats_by_attribute.py```, ```show_stats_per_clip.py```) and to visualize the results (```show_masks.py```, ```render_mask_video.py```, ```show_flow.py```, ```render_flow_video.py```).
 - The code to compose a custom dataset from the raw recorded clips. (```compositor```).
+
+## Qualitative motion segmentation results on real-world scenes
+
+![Hoses and ropes in a workshop.](videos/workshop-hoses-ropes.mp4)
+
+![Untidy cables in an office.](videos/office-untidy-cables.mp4)
+
+The (SAM+DINO) method is a semantic segmentation method, not a motion segmentation one. It is a combination of Dino + Segment Anything with the query "rope hose cable".
 
 ## Dataset
 

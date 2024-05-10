@@ -35,11 +35,11 @@ This repository contains:
 
 We provide the composed MovingCables dataset in two packages, full and small. Both packages contain all the 312 composed video clips. The full package contains all the 187187 images (ca. 600 images per clip, 60 FPS). The small package contains ten times fewer images per clip, i.e. ca. 60 images per clip, 6 FPS.
 
-- MovingCables_full.tar - TODO: Add the link.
+- [MovingCables_full.tar](https://data.ciirc.cvut.cz/public/projects/2024MovingCables/MovingCables_full.tar)
   - size: 114.6 GiB
   - sha256sum: ```ce5841f1d706b5a4e76d85b21b3e9397b7235e3e76250d999eb0d8681368a641```
   - 60 FPS. 600 images per clip.
-- MovingCables_small.tar - TODO: Add the link.
+- [MovingCables_small.tar](https://data.ciirc.cvut.cz/public/projects/2024MovingCables/MovingCables_small.tar)
   - size: 11.5 GiB
   - sha256sum: ```37fae4b64de416ec5f36c1f0c9e2fa2f6c2ac85a76f64be165d97a481d9633c8```
   - 6 FPS. 60 images per clip.

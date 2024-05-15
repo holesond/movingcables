@@ -471,6 +471,11 @@ https://github.com/holesond/movingcables/assets/6507466/39ab84f5-5482-4177-adc2-
 ![Segmentation - test clip 0006.](videos/test-0006-seg.mp4)
 
 
+The same video rendered for test clip 0003 (with a moving poking stick):
+
+![Segmentation - test clip 0003.](videos/test-0003-seg.mp4)
+
+
 **Show optical flow images**
 
 Show the ground truth optical and normal flow, the ground truth instance segmentation and the (normal) optical flow predicted by all three methods for frame 381 of clip 0006 from the small test set:
@@ -492,6 +497,11 @@ time python3 render_flow_video.py videos/test-0006-flow.mp4 $DATASET_ROOT/sample
 https://github.com/holesond/movingcables/assets/6507466/01d89133-86b7-47db-a5de-95bf430afb27
 
 ![Optical flow - test clip 0006.](videos/test-0006-flow.mp4)
+
+
+The same video rendered for test clip 0003 (with a moving poking stick):
+
+![Segmentation - test clip 0003.](videos/test-0003-flow.mp4)
 
 
 ## Dataset compositing code

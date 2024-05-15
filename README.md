@@ -501,7 +501,7 @@ https://github.com/holesond/movingcables/assets/6507466/01d89133-86b7-47db-a5de-
 
 The same video rendered for test clip 0003 (with a moving poking stick):
 
-![Segmentation - test clip 0003.](videos/test-0003-flow.mp4)
+![Optical flow - test clip 0003.](videos/test-0003-flow.mp4)
 
 
 ## Dataset compositing code

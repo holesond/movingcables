@@ -14,23 +14,37 @@ from evaluator.segmenters import FlowSegmenter
 from flow_predictors.online_flow import OnlineFlow as OnlineFlowMaskFlownet
 from flow_predictors.online_flow_farneback import OnlineFlow as \
     OnlineFlowFarneback
+from flow_predictors.online_flow_gmflow import OnlineFlowGMFlow
+from flow_predictors.online_flow_flowformerpp import OnlineFlowFlowFormerPP
 
 
 
-def get_flow_predictor(gpu=False, small=False, farneback=False):
+def get_flow_predictor(
+        gpu=False, small=False, farneback=False, finetuned=False,
+        gmflow=False,
+        flowformerpp=False):
     if farneback:
         return OnlineFlowFarneback(gpu)
-    return OnlineFlowMaskFlownet(gpu=gpu, probabilistic=False, small=small)
+    if gmflow:
+        return OnlineFlowGMFlow(gpu)
+    if flowformerpp:
+        return OnlineFlowFlowFormerPP(gpu)
+    return OnlineFlowMaskFlownet(
+        gpu=gpu, probabilistic=False, small=small, finetuned=finetuned)
 
 
-def get_mfnprob_predictor(gpu=False, small=False):
-    return OnlineFlowMaskFlownet(gpu=gpu, probabilistic=True, small=small)
+def get_mfnprob_predictor(gpu=False, small=False, finetuned=False):
+    return OnlineFlowMaskFlownet(
+        gpu=gpu, probabilistic=True, small=small, finetuned=finetuned)
 
 
 def main(folder_rgb, fn_stats_out, gpu=False, debug=False,
         probabilistic=True, small=False, mask_save_folder=None,
         flow_save_folder=None, uncertainty_save_folder=None,
         thr_motion=2.5, compute_mui=True, farneback=False,
+        finetuned=False,
+        gmflow=False,
+        flowformerpp=False,
         progress_queue=None):
     """Run motion segmentation evaluation and save the results.
     
@@ -50,15 +64,20 @@ def main(folder_rgb, fn_stats_out, gpu=False, debug=False,
             several different motion and uncertainty thresholds (default True)
     farneback -- If True, use Farneback's optical flow from OpenCV instead
             of MaskFlownet(S) or MaskFlownetProb(S). (default False)
+    gmflow -- If True, use GMFlow optical flow instead
+            of MaskFlownet(S) or MaskFlownetProb(S). (default False)
+    flowformerpp -- If True, use FlowFormer++ optical flow instead
+            of MaskFlownet(S) or MaskFlownetProb(S). (default False)
     """
     folder_stats_out = os.path.dirname(fn_stats_out)
     pathlib.Path(folder_stats_out).mkdir(parents=True, exist_ok=True)
     flow_predictor = None
     flow_predictor_prob = None
     if probabilistic:
-        flow_predictor_prob = get_mfnprob_predictor(gpu, small)
+        flow_predictor_prob = get_mfnprob_predictor(gpu, small, finetuned)
     else:
-        flow_predictor = get_flow_predictor(gpu, small, farneback)
+        flow_predictor = get_flow_predictor(
+            gpu, small, farneback, finetuned, gmflow, flowformerpp)
     segmenter = FlowSegmenter(
         flow_predictor, flow_predictor_prob, debug=debug)
     ce = evaluator.ClipEvaluator(
@@ -92,11 +111,20 @@ def add_parser_options(parser):
         "-p", "--probabilistic", action="store_true", default=False,
         help="run MfnProb")
     parser.add_argument(
+        "--finetuned", action="store_true", default=False,
+        help="run MfnProb or MaskFlownet finetuned on MovingCables")
+    parser.add_argument(
         "-s", "--small", action="store_true", default=False,
         help="run MaskFlownet_S architecture instead of MaskFlownet")
     parser.add_argument(
         "-f", "--farneback", action="store_true", default=False,
         help="run Farneback's optical flow instead of MaskFlownet")
+    parser.add_argument(
+        "--gmflow", action="store_true", default=False,
+        help="run GMFlow optical flow instead of MaskFlownet")
+    parser.add_argument(
+        "--flowformerpp", action="store_true", default=False,
+        help="run FlowFormer++ optical flow instead of MaskFlownet")
     parser.add_argument(
         '-o', action='store', dest='mask_save_folder', default=None,
         help="if set, save computed segmentation masks to the given folder")
@@ -130,7 +158,9 @@ def cmd_main():
         args.probabilistic, args.small, args.mask_save_folder,
         args.flow_save_folder,
         thr_motion=args.motion_threshold, compute_mui=args.compute_mui,
-        farneback=args.farneback,
+        farneback=args.farneback, finetuned=args.finetuned,
+        gmflow=args.gmflow,
+        flowformerpp=args.flowformerpp,
         progress_queue=progress_keeper.progress_queue)
     progress_keeper.close()
 

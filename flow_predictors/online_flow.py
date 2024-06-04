@@ -18,7 +18,8 @@ predict_flow.repoRoot = mfn_repo_root
 class OnlineFlow():
     """Online optical flow prediction interface to MaskFlownet(S)(Prob)."""
     def __init__(
-            self, gpu=False, args=None, probabilistic=False, small=False):
+            self, gpu=False, args=None, probabilistic=False, small=False,
+            finetuned=False):
         """Initialize the interface and load the chosen neural network models.
         
         Keyword arguments:
@@ -29,6 +30,8 @@ class OnlineFlow():
             use MaskFlownet(S). (default False)
         small -- load the small (S) version of MaskFlownet(Prob)
             (default False)
+        finetuned -- load MaskFlownet or MaskFlownetProb finetuned
+            on MovingCables (default False)
         """
         if args is not None:
             self.setup_pipeline(args)
@@ -46,7 +49,13 @@ class OnlineFlow():
             args.checkpoint = "dbbSep30"    # stage 3
         else:
             args.config = "MaskFlownet.yaml"
-            args.checkpoint = "8caNov12"    # stage 6
+            if finetuned:
+                # finetuned on MovingCables:
+                #args.checkpoint = "346Apr17-1717"
+                # finetuned on a mix of MovingCables, Sintel, KITTI, HD1K:
+                args.checkpoint = "975Apr26-1614"
+            else:
+                args.checkpoint = "8caNov12"    # stage 6
         if probabilistic:
             args.network = "MaskFlownetProb"
             if small:
@@ -61,7 +70,13 @@ class OnlineFlow():
             else:
                 args.config = "MaskFlownetProb.yaml"
                 #args.checkpoint = "0f6May06-2059"    # stage 6
-                args.checkpoint = "99bMay18-1454"    # stage 6 softplus q=None
+                if finetuned:
+                    # finetuned on MovingCables:
+                    #args.checkpoint = "43eApr17-1653"
+                    # finetuned on a mix of MovingCables, Sintel, KITTI, HD1K:
+                    args.checkpoint = "b1aApr25-1426"
+                else:
+                    args.checkpoint = "99bMay18-1454"  # stage 6 softplus q=None
         self.setup_pipeline(args)
         
     def setup_pipeline(self, args):

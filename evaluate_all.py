@@ -27,6 +27,9 @@ def main(
         probabilistic=True, small=False, mask_save_folder=None,
         flow_save_folder=None, uncertainty_save_folder=None,
         thr_motion=2.5, compute_mui=True, farneback=False,
+        finetuned=False,
+        gmflow=False,
+        flowformerpp=False,
         max_workers=2):
     pathlib.Path(folder_stats_out).mkdir(parents=True, exist_ok=True)
     rgba_root = os.path.join(folder_clips,"rgba_clips")
@@ -59,7 +62,8 @@ def main(
                 folder_rgb, fn_stats_out, gpu, debug,
                 probabilistic, small, clip_mask_save_folder,
                 clip_flow_save_folder, clip_uncertainty_save_folder,
-                thr_motion, compute_mui, farneback,
+                thr_motion, compute_mui, farneback, finetuned, gmflow,
+                flowformerpp,
                 progress_keeper.progress_queue,
                 ])
             rgb_folders.append(folder_rgb)
@@ -97,7 +101,10 @@ def cmd_main():
         args.probabilistic, args.small, args.mask_save_folder,
         args.flow_save_folder,
         thr_motion=args.motion_threshold, compute_mui=args.compute_mui,
-        farneback=args.farneback, max_workers=args.jobs)
+        farneback=args.farneback, finetuned=args.finetuned,
+        gmflow=args.gmflow,
+        flowformerpp=args.flowformerpp,
+        max_workers=args.jobs)
 
 
 if __name__ == "__main__":

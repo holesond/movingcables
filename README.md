@@ -46,6 +46,9 @@ https://github.com/holesond/movingcables/assets/6507466/a1a766d0-396c-4eb1-8761-
 
 ![Untidy cables in an office.](videos/office-untidy-cables.mp4)
 
+
+https://github.com/holesond/movingcables/assets/6507466/3cb1ad58-13d8-4516-b414-30eadeeddff4
+
 ![Multiple moving cables.](videos/multiple-moving-cables.mp4)
 
 The (SAM+DINO) method is a semantic segmentation method, not a motion segmentation one. It is a combination of Dino + Segment Anything with the query "rope hose cable".

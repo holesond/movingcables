@@ -10,6 +10,7 @@ By Ondřej Holešovský, Radoslav Škoviera, Václav Hlaváč.
 4. [License](#license)
 5. [Evaluation code](#evaluation-code)
     * [Installation](#installation)
+    * [Run inference on an image sequence](#run-inference-on-an-image-sequence)
     * [Compute the evaluation results](#compute-the-evaluation-results)
     * [Show the computed quantitative results](#show-the-computed-quantitative-results)
     * [Show or generate qualitative visualizations](#show-or-generate-qualitative-visualizations)
@@ -28,7 +29,8 @@ This repository contains:
 
 - The code of MfnProb (MaskFlownetProb), that is [MaskFlownet](https://github.com/microsoft/MaskFlownet/) optical flow predicting neural network with probabilistic outputs added. See the ```MaskFlownet``` directory and ```flow_predictors/online_flow.py```.
 - The pretrained weights of MfnProb. (```MaskFlownet/weights/99bMay18-1454_1000000.params```)
-- The code to evaluate MfnProb, MaskFlownet and Farnebäck cable motion segmentation methods on the MovingCables dataset. (```evaluate_all.py```, ```evaluate_single.py```)
+- The pretrained weights of MfnProb FT (```MaskFlownet/weights/b1aApr25-1426_320000.params```) and MaskFlownet FT (```MaskFlownet/weights/975Apr26-1614_320000.params```), networks fine-tuned on a mixture of Sintel, KITTI, HD1K, and the MovingCables training set.
+- The code to evaluate MfnProb, MaskFlownet, MfnProb FT, MaskFlownet FT, Farnebäck, and optionally GMFlow and FlowFormer++ cable motion segmentation methods on the MovingCables dataset. (```evaluate_all.py```, ```evaluate_single.py```)
 - The code to print the quantitative evaluation metrics (```show_stats.py```, ```stats_by_attribute.py```, ```show_stats_per_clip.py```) and to visualize the results (```show_masks.py```, ```render_mask_video.py```, ```show_flow.py```, ```render_flow_video.py```).
 - The code to compose a custom dataset from the raw recorded clips. (```compositor```).
 
@@ -43,6 +45,8 @@ https://github.com/holesond/movingcables/assets/6507466/c0e390da-0179-40af-a041-
 https://github.com/holesond/movingcables/assets/6507466/a1a766d0-396c-4eb1-8761-15dd1f97724e
 
 ![Untidy cables in an office.](videos/office-untidy-cables.mp4)
+
+![Multiple moving cables.](videos/multiple-moving-cables.mp4)
 
 The (SAM+DINO) method is a semantic segmentation method, not a motion segmentation one. It is a combination of Dino + Segment Anything with the query "rope hose cable".
 
@@ -86,7 +90,7 @@ All the composed dataset files are PNG images. They are stored in directories ac
 
 The published composed dataset contains only odd-numbered images (00000001.png, 00000003.png, ...). These images were captured with the white light turned on. (In a raw recorded sequence, each such white-lit image was preceded and followed by even-numbered UV-lit images (00000000.png, 00000002.png, 00000004.png, ...). The first (00000000.png) and the last image of a raw recorded sequence was always captured with the UV light turned on. These UV-lit images are not in the composed dataset.)
 
-To load the optical flow or normal flow images from the PNG files, one can use the function ```load_flow_png_float``` from ```evaluator/evaluator.py```.
+The flow images have three 16-bit channels. The first two channels encode the ground truth optical flow. The third channel stores the ground truth cable instance segmentation label of each pixel. The background label is ```0```, integers greater than zero (```1,2,3,...```) label individual cable instances (```1,2,3,...```). To load the optical flow or normal flow images from the PNG files, one can use function ```load_flow_png_float``` from ```evaluator/evaluator.py```. The key line (in Python) for converting the 16-bit unsigned integer (uint16) values to floating point (float) flow values in pixels is ```flow_float[...,0:2] = (flow_uint16[...,0:2] - 2**15)*(1.0/64.0)```.
 
 To play a dataset clip (a sequence of images) as a video, one can use the [mpv](https://mpv.io/) media player as follows:
 
@@ -129,7 +133,7 @@ The MovingCables dataset © 2024 by Ondrej Holesovsky, Radoslav Skoviera, Vaclav
 The source code in this repository is licensed under the MIT license.
 
 
-## Evaluation code
+## Evaluation and inference code
 
 We obtained all the reported runtimes on a desktop computer with an NVIDIA GeForce RTX 2080 Ti and Intel Core i9-9900K CPU @ 3.60GHz.
 
@@ -163,6 +167,47 @@ Activate the environment before each use in a new terminal by:
 source /home/user/apps/venv/movingcables/bin/activate
 ```
 
+Optional: Download [Unimatch](https://github.com/autonomousvision/unimatch) and/or [FlowFormer++](https://github.com/XiaoyuShi97/FlowFormerPlusPlus) Git repos to enable the evaluation of cable motion segmentation methods based on GMFlow and/or FlowFormer++ optical flow predictors. The MovingCables evaluation code expects these repos to reside in the MovingCables code root directory in folders ```unimatch``` and ```FlowFormerPlusPlus```. (We downloaded and tested FlowFormerPlusPlus commit ```c33de90f35af3fac1a55de6eac58036dd8ffb3b3``` and Unimatch commit ```95ffabe53adea0bc33a13de302d827d55c600edd```.) Also install the specific dependencies of Unimatch and/or FlowFormer++.
+
+
+### Run inference on an image sequence
+
+To run MfnProb motion segmentation with the motion threshold of 2.5 pixels on your own image sequence on a CPU, use:
+
+```
+python run_inference.py --mt 2.5 mfnprob /path/to/input/image/sequence/folder /output/folder
+```
+
+The input folder should contain only images (typically in PNG or JPEG format) named in such a way that sorting them by the file name yields the correct image sequence. (Zero-padded integers (00000000.png, 00000001.png, 00000002.png, ...) are one such suitable file naming system.)
+
+The program will save the images with overlaid semi-transparent green motion segmentation masks into the output folder.
+
+The help text of ```run_inference.py```:
+
+```
+usage: run_inference.py [-h] [-d] [-g] [--mt MOTION_THRESHOLD]
+                        method_name folder_rgb folder_out
+
+Run motion segmentation on an image sequence. Save images with overlaid
+segmentation masks.
+
+positional arguments:
+  method_name           segmentation method name to run (maskflownet,
+                        maskflownet_ft, mfnprob, mfnprob_ft, farneback,
+                        gmflow, flowformerpp)
+  folder_rgb            input RGB(A) clip folder
+  folder_out            output folder path
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d, --debug           debug mode
+  -g, --gpu             run the method on a GPU
+  --mt MOTION_THRESHOLD
+                        set the flow magnitude segmentation threshold
+```
+
+The methods ```maskflownet_ft``` and ```mfnprob_ft``` are MaskFlownet and MfnProb fine-tuned on a mixture of Sintel, KITTI, HD1K, and the MovingCables training set.
+
 ### Compute the evaluation results
 
 The following examples evaluate the motion segmentation algorithms (MfnProb, MaskflowNet, Farnebäck) on the small version of the dataset. If you want to run the evaluation on the full dataset, replace ```sampled_compositions_small``` with ```sampled_compositions``` in the paths to the dataset and the results.
@@ -173,7 +218,8 @@ The help text of ```evaluate_all.py```:
 
 ```
 $ python evaluate_all.py -h
-usage: evaluate_all.py [-h] [-d] [-g] [-p] [-s] [-f] [-o MASK_SAVE_FOLDER]
+usage: evaluate_all.py [-h] [-d] [-g] [-p] [--finetuned] [-s] [-f] [--gmflow]
+                       [--flowformerpp] [-o MASK_SAVE_FOLDER]
                        [-of FLOW_SAVE_FOLDER] [--mt MOTION_THRESHOLD]
                        [--no-mui] [-j JOBS]
                        folder_clips folder_stats_out
@@ -190,8 +236,11 @@ optional arguments:
   -d, --debug           debug mode
   -g, --gpu             run MaskflowNet on GPU
   -p, --probabilistic   run MfnProb
+  --finetuned           run MfnProb or MaskFlownet finetuned on MovingCables
   -s, --small           run MaskFlownet_S architecture instead of MaskFlownet
   -f, --farneback       run Farneback's optical flow instead of MaskFlownet
+  --gmflow              run GMFlow optical flow instead of MaskFlownet
+  --flowformerpp        run FlowFormer++ optical flow instead of MaskFlownet
   -o MASK_SAVE_FOLDER   if set, save computed segmentation masks to the given
                         folder
   -of FLOW_SAVE_FOLDER  if set, save predicted optical flow images to the

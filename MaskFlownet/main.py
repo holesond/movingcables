@@ -24,7 +24,7 @@ import mxnet as mx
 
 # data readers
 from reader.chairs import binary_reader, trainval, ppm, flo
-from reader import sintel, kitti, hd1k, things3d
+from reader import sintel, kitti, hd1k, things3d, movingcables
 import cv2
 import imageio
 
@@ -391,10 +391,76 @@ elif dataset_cfg.dataset.value == 'chairs':
             validationSize += len(flow)
             validation_datasets['sintel.' + k] = (img1, img2, flow, mask)
 
+elif dataset_cfg.dataset.value == 'movingcables':
+    batch_size = 4
+    print('loading movingcables dataset ...')
+    sys.stdout.flush()
+    
+    num_sintel = dataset_cfg.sintel.get(0)
+    num_kitti = dataset_cfg.kitti.get(0)
+    num_hd1k = dataset_cfg.hd1k.get(0)
+
+    #orig_shape = dataset_cfg.orig_shape.get([480, 640])
+    orig_shape = dataset_cfg.orig_shape.get([436, 640])
+    # cv2.resize assumes resize=(width, height)
+    resize_shape = (640, dataset_cfg.resize_shape.get(436))
+    parts = 'train'
+
+    # training
+    dataset = movingcables.read_dataset(
+        parts = 'train', samples = samples, resize = resize_shape, shard=4)
+    trainSize = len(dataset['flow'])
+    training_datasets = [(dataset['image_0'], dataset['image_1'], dataset['flow'], dataset['occ'])] * (batch_size - num_kitti - num_hd1k - num_sintel)
+    
+    # validation
+    validationSize = 0
+    dataset = movingcables.read_dataset(
+        parts = 'valid', samples = samples, resize = resize_shape, shard=2)
+    validationSize += len(dataset['flow'])
+    validation_datasets['movingcables'] = (dataset['image_0'], dataset['image_1'], dataset['flow'], dataset['occ'])
+    
+    subsets = ('training' if dataset_cfg.train_all.get(False) else 'training1', 'training2')
+    
+    #resize_shape = (1024, dataset_cfg.resize_shape.get(436))
+    if num_sintel > 0:
+        print('loading sintel dataset ...')
+        # training
+        trainImg1 = []
+        trainImg2 = []
+        trainFlow = []
+        trainMask = []
+        sintel_dataset = sintel.list_data()
+        for k, dataset in sintel_dataset[subsets[0]].items():
+            dataset = dataset[:samples]
+            img1, img2, flow, mask = [
+                [sintel.load(p, resize=resize_shape) for p in data]
+                for data in zip(*dataset)]
+            trainImg1.extend(img1)
+            trainImg2.extend(img2)
+            trainFlow.extend(flow)
+            trainMask.extend(mask)
+        trainSize += len(trainMask)
+        training_datasets += [(trainImg1, trainImg2, trainFlow, trainMask)] * num_sintel
+
+    if num_kitti > 0:
+        print('loading kitti dataset ...')
+        sys.stdout.flush()
+        editions = '2015'
+        dataset = kitti.read_dataset(resize = resize_shape, samples = samples, editions = editions)
+        trainSize += len(dataset['flow'])
+        training_datasets += [(dataset['image_0'], dataset['image_1'], dataset['flow'], dataset['occ'])] * num_kitti
+
+    if num_hd1k > 0:
+        print('loading hd1k dataset ...')
+        sys.stdout.flush()
+        dataset = hd1k.read_dataset(resize = resize_shape, samples = samples)
+        trainSize += len(dataset['flow'])
+        training_datasets += [(dataset['image_0'], dataset['image_1'], dataset['flow'], dataset['occ'])] * num_hd1k
+
 else:
     raise NotImplementedError
 
-print('Using {}s'.format(default_timer() - t0))
+print('Using {:.3f}s'.format(default_timer() - t0))
 sys.stdout.flush()
 
 #
@@ -424,6 +490,16 @@ if dataset_cfg.dataset.value == 'sintel':
 elif dataset_cfg.dataset.value == 'kitti':
     color_aug = aug_func(contrast_range=(-0.2, 0.4), brightness_sigma=0.05, channel_range=(0.9, 1.2), batch_size=batch_size_card,
             shape=target_shape, noise_range=(0, 0.02), saturation=0.25, hue=0.1, gamma_range=(-0.5, 0.5), eigen_aug = False)
+elif dataset_cfg.dataset.value == 'movingcables':
+    color_aug = aug_func(
+        contrast_range=(-0.2, 0.4),
+        brightness_sigma=0.05,
+        channel_range=(0.9, 1.2),
+        batch_size=batch_size_card,
+        shape=target_shape,
+        noise_range=(0, 0.02),
+        saturation=0.25, hue=0.1,
+        gamma_range=(-0.5, 0.5), eigen_aug = False)
 else:
     color_aug = aug_func(contrast_range=(-0.4, 0.8), brightness_sigma=0.1, channel_range=(0.8, 1.4), batch_size=batch_size_card,
             shape=target_shape, noise_range=(0, 0.04), saturation=0.5, hue=0.5, eigen_aug = False)

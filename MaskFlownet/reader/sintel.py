@@ -1,5 +1,6 @@
 import os
 import re
+import cv2
 import skimage.io
 from functools import lru_cache
 import struct
@@ -74,15 +75,27 @@ class Flo:
             fp.write(arr.astype(np.float32).tobytes())
 
 @lru_cache(maxsize=None)
-def load(fname):
+def load(fname, resize=None):
     flo = Flo(1024, 436)
     if fname.endswith('png'):
         data = skimage.io.imread(fname)
+        is_mask = False
         if data.ndim < 3:
             data = 255 - np.expand_dims(data, -1)
+            is_mask = True
+        if resize is not None:
+            if is_mask:
+                data = cv2.resize(data.astype(np.float32), resize)[..., np.newaxis]
+                data = data.astype(np.uint8)
+            else:
+                data = cv2.resize(data, resize)
         return data
     elif fname.endswith('flo'):
-        return flo.load(fname)
+        flow = flo.load(fname)
+        if resize is not None:
+            flow = cv2.resize(flow, resize) * ((np.array(resize, dtype = np.float32) - 1.0) / (
+                    np.array([flow.shape[d] for d in (1, 0)], dtype = np.float32) - 1.0))[np.newaxis, np.newaxis, :]
+        return flow
 
 if __name__ == '__main__':
     dataset = list_data()

@@ -1,0 +1,23 @@
+validation_steps:
+  2500
+
+checkpoint_steps:
+  5000
+
+dataset:
+  movingcables
+
+sintel:
+  1
+
+kitti:
+  1
+
+hd1k:
+  1
+
+target_shape:
+  [384, 640]
+
+kitti_15:
+  True

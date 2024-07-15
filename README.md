@@ -584,7 +584,7 @@ https://github.com/holesond/movingcables/assets/6507466/da35ce1f-98c7-4c17-92cb-
 
 ## Training
 
-The following training commands require setting the ```data_prefix``` variable in ```MaskFlownet/reader/dataset_prefix.py``` to the directory containing the Sintel, KITTI and HD1K datasets and changing the ```mc_root``` variable in ```MaskFlownet/reader/movingcables.py``` to your MovingCables dataset path. See ```MaskFlownet/README.md``` for more details on MaskFlownet training.
+The following training commands require setting the ```data_prefix``` variable in ```MaskFlownet/reader/dataset_prefix.py``` to the directory containing Sintel, KITTI and HD1K datasets and setting the ```mc_root``` variable in ```MaskFlownet/reader/movingcables.py``` to your MovingCables dataset path (e.g. expanded ```$DATASET_ROOT/sampled_compositions_small```). We fine-tuned MfnProb and MaskFlownet on MovingCables_small (```sampled_compositions_small```).
 
 ```
 cd MaskFlownet
@@ -601,6 +601,8 @@ Fine-tune MaskFlownet (start from checkpoint ```8caNov12-1532```) on a mixture o
 ```
 time python main.py MaskFlownet_sintel_short.yaml --dataset_cfg movingcables.yaml -g 0 -c 8caNov12-1532 --clear_steps
 ```
+
+See ```MaskFlownet/README.md``` for more details on MaskFlownet training. 
 
 
 ## Dataset compositing code

@@ -32,7 +32,8 @@ If you use this work in your research, please cite:
     * [Compute the evaluation results](#compute-the-evaluation-results)
     * [Show the computed quantitative results](#show-the-computed-quantitative-results)
     * [Show or generate qualitative visualizations](#show-or-generate-qualitative-visualizations)
-6. [Dataset compositing code](#dataset-compositing-code)
+6. [Training](#training)
+7. [Dataset compositing code](#dataset-compositing-code)
     * [Installation](#installation-2)
     * [Usage](#usage)
 
@@ -579,6 +580,27 @@ The same video rendered for test clip 0003 (with a moving poking stick):
 https://github.com/holesond/movingcables/assets/6507466/da35ce1f-98c7-4c17-92cb-52ee9b2f77e2
 
 ![Optical flow - test clip 0003.](videos/test-0003-flow.mp4)
+
+
+## Training
+
+The following training commands require setting the ```data_prefix``` variable in ```MaskFlownet/reader/dataset_prefix.py``` to the directory containing the Sintel, KITTI and HD1K datasets and changing the ```mc_root``` variable in ```MaskFlownet/reader/movingcables.py``` to your MovingCables dataset path. See ```MaskFlownet/README.md``` for more details on MaskFlownet training.
+
+```
+cd MaskFlownet
+```
+
+Fine-tune MfnProb (start from checkpoint ```99bMay18-1454```) on a mixture of MovingCables, Sintel, KITTI, HD1K (manually stopped at steps=320650, runtime 20h30m):
+
+```
+time python main.py MaskFlownetProb_sintel_noq.yaml -n MaskFlownetProb --dataset_cfg movingcables.yaml -g 0 -c 99bMay18-1454 --clear_steps
+```
+
+Fine-tune MaskFlownet (start from checkpoint ```8caNov12-1532```) on a mixture of MovingCables, Sintel, KITTI, HD1K (runtime 19h30m):
+
+```
+time python main.py MaskFlownet_sintel_short.yaml --dataset_cfg movingcables.yaml -g 0 -c 8caNov12-1532 --clear_steps
+```
 
 
 ## Dataset compositing code

@@ -26,7 +26,7 @@ If you use this work in your research, please cite:
 2. [Qualitative motion segmentation results on real-world scenes](#qualitative-motion-segmentation-results-on-real-world-scenes)
 3. [Dataset](#dataset)
 4. [License](#license)
-5. [Evaluation code](#evaluation-code)
+5. [Evaluation and inference code](#evaluation-and-inference-code)
     * [Installation](#installation)
     * [Run inference on an image sequence](#run-inference-on-an-image-sequence)
     * [Compute the evaluation results](#compute-the-evaluation-results)

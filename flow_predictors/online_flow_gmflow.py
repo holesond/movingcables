@@ -4,20 +4,22 @@ import pathlib
 import inspect
 import time
 
-import torch
-import torch.nn.functional as F
 import numpy as np
 import cv2
 
 script_dir = os.path.dirname(inspect.getfile(inspect.currentframe()))
 unimatch_root = os.path.join(script_dir,"../unimatch")
 sys.path.append(unimatch_root)
+
 try:
+    import torch
+    import torch.nn.functional as F
+
     from unimatch.unimatch import UniMatch
 except ImportError as e:
     print(
         f"Note: Failed to import the optional unimatch module. "
-        f"(Maybe you have not downloaded it.)\n"
+        f"(Maybe you have not installed it.)\n"
         f"    ({e})")
 
 

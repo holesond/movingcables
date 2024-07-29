@@ -4,8 +4,6 @@ import pathlib
 import inspect
 import time
 
-import torch
-import torch.nn.functional as F
 import numpy as np
 import cv2
 
@@ -16,13 +14,16 @@ sys.path.append(os.path.join(flowformerpp_root, "core"))
 #sys.path.append(os.path.join(flowformerpp_root, "configs"))
 
 try:
+    import torch
+    import torch.nn.functional as F
+
     from core.FlowFormer import build_flowformer
     from utils.utils import InputPadder
     from configs.submissions import get_cfg
 except ImportError as e:
     print(
         f"Note: Failed to import the optional FlowFormerPlusPlus module. "
-        f"(Maybe you have not downloaded it.)\n"
+        f"(Maybe you have not installed it.)\n"
         f"    ({e})")
 
 

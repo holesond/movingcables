@@ -28,7 +28,7 @@ def read_dataset(path = None, parts = 'mixed', resize = None, samples = -1, norm
     num_files = len(list_files) - 1
     ind_valids = VALIDATE_INDICES
     num_valids = len(ind_valids)
-    if samples is not -1:
+    if samples != -1:
         num_files = min(num_files, samples)
     ind = 0
     i_pre = -1

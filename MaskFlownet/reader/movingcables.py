@@ -51,7 +51,7 @@ def read_dataset(
                 continue
             list_files.append([clip_name, image_name])
     num_files = len(list_files)
-    if samples is not -1:
+    if samples != -1:
         num_files = min(num_files, samples)
     for k in range(0, num_files, shard):
         clip_name, image_name = list_files[k]

@@ -2,7 +2,9 @@
 
 This is the official repository for the letter [MovingCables: Moving Cable Segmentation Method and Dataset](https://doi.org/10.1109/LRA.2024.3416800), IEEE RA-L, 2024 by Ondřej Holešovský, Radoslav Škoviera, Václav Hlaváč.
 
-All the dataset packages are available on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11475246.svg)](https://doi.org/10.5281/zenodo.11475246)
+All the dataset packages are available on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14627726.svg)](https://doi.org/10.5281/zenodo.14627726)
+
+
 
 If you use this work in your research, please cite:
 
@@ -74,7 +76,7 @@ The (SAM+DINO) method is a semantic segmentation method, not a motion segmentati
 
 ## Dataset
 
-All the dataset packages are available on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11475246.svg)](https://doi.org/10.5281/zenodo.11475246)
+All the dataset packages are available on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14627726.svg)](https://doi.org/10.5281/zenodo.14627726)
 
 We provide the composed MovingCables dataset in two packages, full and small. Both packages contain all the 312 composed video clips. The full package contains all the 187187 images (ca. 600 images per clip, 60 FPS). The small package contains ten times fewer images per clip, i.e. ca. 60 images per clip, 6 FPS.
 

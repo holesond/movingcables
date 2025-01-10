@@ -149,6 +149,15 @@ The source dataset contains the following folders:
 - ```rgba_clips_stick``` - RGBA images showing the cables and the background. The alpha channel masks the poking stick.
 - ```stick_masks``` - Binary images of poking stick segmentation masks.
 
+The marker traces for each source dataset clip are saved in JSON format in a separate zip archive. They can serve as a cable tracking ground truth. One can also use them to create a new optical flow ground truth with different target or reference frames.
+
+- [MovingCables_traces.zip](https://data.ciirc.cvut.cz/public/projects/2024MovingCables/MovingCables_traces.zip)
+  - size: 23 MiB
+  - sha256sum: ```9c84fea2c3d741f0aa1c61be2aeabef64562d0448372e7f38d7dff16e223b833```
+  - The package contains one ```traces.json``` JSON file for each source dataset clip.
+  - Source dataset image file name numbers of a clip ```clip_name``` directly index into the marker traces array loaded from ```traces_json/clip_name/traces.json```. (The traces array stores the marker positions for both the UV-lit and the white-lit images.)
+  - The indexing of each traces array is ```traces[image_index, marker_index, coordinate_index]```, where ```coordinate_index = 0``` means the vertical coordinate and ```coordinate_index = 1``` means the horizontal coordinate of the marker position in the image.
+
 
 ## License
 
